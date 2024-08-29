@@ -4,6 +4,7 @@ import 'package:achieverse/login/login_screen.dart';
 import 'package:achieverse/home_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:provider/provider.dart';
 
 
 void main() {
