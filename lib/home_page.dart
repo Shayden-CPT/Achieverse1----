@@ -45,7 +45,10 @@ class HomePage extends StatelessWidget {
           builder: (context, sizingInformation) {
             return SingleChildScrollView(
               padding: EdgeInsets.symmetric(
-                horizontal: sizingInformation.deviceScreenType == DeviceScreenType.mobile ? 16.0 : 32.0,
+                horizontal: sizingInformation.deviceScreenType ==
+                        DeviceScreenType.mobile
+                    ? 16.0
+                    : 32.0,
                 vertical: 16.0,
               ),
               child: Column(
@@ -54,46 +57,76 @@ class HomePage extends StatelessWidget {
                   _responsiveRow(
                     sizingInformation,
                     [
-                      const HeaderSection(imagePath: '',),
-                      const StatsSection(imagePath: '',),
+                      const HeaderSection(
+                        imagePath: '',
+                      ),
+                      const StatsSection(
+                        imagePath: '',
+                      ),
                     ],
                   ),
                   _responsiveRow(
                     sizingInformation,
                     [
-                      const PopularCoursesSection(imagePath: '',),
-                      const InfoSection(imagePath: '',),
+                      const PopularCoursesSection(
+                        imagePath: '',
+                      ),
+                      const InfoSection(
+                        imagePath: '',
+                      ),
                     ],
                   ),
                   _responsiveRow(
                     sizingInformation,
                     [
-                      const TopCategoriesSection(imagePath: '',),
-                      const MentorsSection(imagePath: '',),
+                      const TopCategoriesSection(
+                        imagePath: '',
+                      ),
+                      const MentorsSection(
+                        imagePath: '',
+                      ),
                     ],
                   ),
                   _responsiveRow(
                     sizingInformation,
                     [
-                      const TestimonialsSection(imagePath: '',),
-                      const BlogsSection(imagePath: '',),
+                      const TestimonialsSection(
+                        imagePath: '',
+                      ),
+                      const BlogsSection(
+                        imagePath: '',
+                      ),
                     ],
                   ),
                   _responsiveRow(
                     sizingInformation,
                     [
-                      const DevFeedWidget(topic: 'Flutter', imagePath: '',),
-                      const DevFeedWidget(topic: 'React JS', imagePath: '',),
+                      const DevFeedWidget(
+                        topic: 'Flutter',
+                        imagePath: '',
+                      ),
+                      const DevFeedWidget(
+                        topic: 'React JS',
+                        imagePath: '',
+                      ),
                     ],
                   ),
                   _responsiveRow(
                     sizingInformation,
                     [
-                      const ArticleWidget(topic: 'HTML/CSS', imagePath: '',),
-                      const ArticleWidget(topic: 'C#', imagePath: '',),
+                      const ArticleWidget(
+                        topic: 'HTML/CSS',
+                        imagePath: '',
+                      ),
+                      const ArticleWidget(
+                        topic: 'C#',
+                        imagePath: '',
+                      ),
                     ],
                   ),
-                  const FooterSection(imagePath: '',),
+                  const FooterSection(
+                    imagePath: '',
+                  ),
                 ],
               ),
             );
@@ -103,7 +136,8 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _responsiveRow(SizingInformation sizingInformation, List<Widget> children) {
+  Widget _responsiveRow(
+      SizingInformation sizingInformation, List<Widget> children) {
     if (sizingInformation.deviceScreenType == DeviceScreenType.mobile) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
