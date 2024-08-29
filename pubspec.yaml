@@ -1,0 +1,70 @@
+name: achieverse
+description: "A new Flutter project."
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.6.0-114.0.dev
+
+dependencies:
+  flutter:
+    sdk: flutter
+  responsive_builder: ^0.7.0
+  fl_chart: ^0.68.0  # Added for charts and graphs
+  provider: ^6.1.1  # Added for state management
+  http: ^1.1.0  # Added for making API requests
+  material_color_utilities: ^0.11.1 # Added for Material Design color utilities
+  intl: ^0.19.0  # Added for internationalization
+  shared_preferences: ^2.3.1  # Added for shared preferences
+  flutter_native_splash: ^2.4.1
+  syncfusion_flutter_charts: ^26.2.10 
+  url_strategy: ^0.3.0
+  flutter_riverpod: ^2.3.6
+  flutter_cache_manager: ^3.3.0
+  seo_renderer: ^0.6.0
+  flutter_web_optimizer: ^1.1.0
+  fixnum: ^1.1.0
+  file: ^7.0.0
+  package_config: ^2.1.0
+  shared_preferences_foundation: ^2.5.2
+  sprintf: ^ 7.0.0
+  sqflite: ^ 2.3.3+1
+  sqflite_common: ^ 2.5.4+2
+  standard_message_codec: ^ 0.0.1+4
+  synchronized: ^ 3.2.0
+  uuid: ^ 4.4.2
+  visibility_detector: ^0.4.0+2
+  serverpod_client: ^2.0.2
+  serverpod_flutter: ^2.0.2
+  appwrite: ^13.0.0-rc.2
+  cached_network_image: ^3.2.0
+  web: ^0.5.1
+  web_socket_channel: ^3.0.1 
+  dio: ^5.6.0
+  dio_web_adapter: ^2.0.0
+  firebase_core: ^2.15.1
+  firebase_analytics: ^10.4.5 
+  
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+
+  # Assets
+  assets:
+    - assets/images/
+   
+
+
+  # Fonts
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Roboto-Regular.ttf
+        - asset: assets/fonts/Roboto-Bold.ttf
+          weight: 700
