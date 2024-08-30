@@ -3,11 +3,8 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  connectivity_plus
   firebase_core
   flutter_js
-  url_launcher_windows
-  window_to_front
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST
