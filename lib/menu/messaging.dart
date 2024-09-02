@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:achieverse/responsive_layout.dart';
-import 'package:achieverse/widgets/header_section.dart';
-import 'package:achieverse/widgets/nav_bar.dart';
 import 'package:achieverse/menu/menu_drawer.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:seo_renderer/seo_renderer.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// Define a simple provider
+final counterProvider = StateProvider<int>((ref) => 0);
 
 class Messaging extends StatelessWidget {
-  const Messaging({super.key});
+   Messaging({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -37,21 +38,17 @@ class Messaging extends StatelessWidget {
         // Chat List
         Expanded(
           flex: 2,
-          child: ListView(
+          child: ListView.builder(
             padding: const EdgeInsets.all(16.0),
-            children: const [
-              ChatTile(name: 'Mahomed', message: 'Hey! How are you?', imageUrl: 'assets/alice.jpg'),
-              ChatTile(name: 'Iviwe', message: 'Are we still on for the meeting?', imageUrl: 'assets/bob.jpg'),
-              ChatTile(name: 'Uzair', message: 'Check out this article!', imageUrl: 'assets/charlie.jpg'),
-              ChatTile(name: 'Erin', message: 'Let’s catch up this weekend!', imageUrl: 'assets/diana.jpg'),
-              ChatTile(name: 'Shayden', message: 'Looking forward to the event!', imageUrl: 'assets/eve.jpg'),
-              ChatTile(name: 'Deen', message: 'Hey! How are you?', imageUrl: 'assets/alice.jpg'),
-              ChatTile(name: 'Jenna', message: 'Are we still on for the meeting?', imageUrl: 'assets/bob.jpg'),
-              ChatTile(name: 'Melissa', message: 'Check out this article!', imageUrl: 'assets/charlie.jpg'),
-              ChatTile(name: 'Jack', message: 'Let’s catch up this weekend!', imageUrl: 'assets/diana.jpg'),
-              ChatTile(name: 'Tom', message: 'Looking forward to the event!', imageUrl: 'assets/eve.jpg'),
-              // Add more ChatTiles as needed
-            ],
+            itemCount: _chatData.length,
+            itemBuilder: (context, index) {
+              final chat = _chatData[index];
+              return ChatTile(
+                name: chat['name']!,
+                message: chat['message']!,
+                imageUrl: chat['imageUrl']!,
+              );
+            },
           ),
         ),
         // Divider
@@ -98,12 +95,27 @@ class Messaging extends StatelessWidget {
   }
 
   Widget _buildTabletLayout(BuildContext context) {
-    return Container();
+    return Container(); // Implement tablet layout
   }
 
   Widget _buildMobileLayout(BuildContext context) {
-    return Container();
+    return Container(); // Implement mobile layout
   }
+
+  // Example data for chat
+  final List<Map<String, String>> _chatData = [
+    {'name': 'Mahomed', 'message': 'Hey! How are you?', 'imageUrl': 'https://example.com/assets/alice.jpg'},
+    {'name': 'Iviwe', 'message': 'Are we still on for the meeting?', 'imageUrl': 'https://example.com/assets/bob.jpg'},
+    {'name': 'Uzair', 'message': 'Check out this article!', 'imageUrl': 'https://example.com/assets/charlie.jpg'},
+    {'name': 'Erin', 'message': 'Let’s catch up this weekend!', 'imageUrl': 'https://example.com/assets/diana.jpg'},
+    {'name': 'Shayden', 'message': 'Looking forward to the event!', 'imageUrl': 'https://example.com/assets/eve.jpg'},
+    {'name': 'Deen', 'message': 'Hey! How are you?', 'imageUrl': 'https://example.com/assets/alice.jpg'},
+    {'name': 'Jenna', 'message': 'Are we still on for the meeting?', 'imageUrl': 'https://example.com/assets/bob.jpg'},
+    {'name': 'Melissa', 'message': 'Check out this article!', 'imageUrl': 'https://example.com/assets/charlie.jpg'},
+    {'name': 'Jack', 'message': 'Let’s catch up this weekend!', 'imageUrl': 'https://example.com/assets/diana.jpg'},
+    {'name': 'Tom', 'message': 'Looking forward to the event!', 'imageUrl': 'https://example.com/assets/eve.jpg'},
+    // Add more chat data as needed
+  ];
 }
 
 class ChatTile extends StatelessWidget {
@@ -125,7 +137,7 @@ class ChatTile extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 8.0),
       child: ListTile(
         leading: CircleAvatar(
-          backgroundImage: AssetImage(imageUrl),
+          backgroundImage: CachedNetworkImageProvider(imageUrl),
           radius: 30,
         ),
         title: Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
@@ -143,6 +155,7 @@ class ChatTile extends StatelessWidget {
     );
   }
 }
+
 class NotificationTile extends StatelessWidget {
   final String title;
   final String description;

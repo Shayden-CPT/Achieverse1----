@@ -3,13 +3,19 @@ import '../models/blog.dart';
 import 'package:achieverse/responsive_layout.dart';
 import 'package:achieverse/widgets/header_section.dart';
 import 'package:achieverse/widgets/nav_bar.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// Define a simple provider
+final counterProvider = StateProvider<int>((ref) => 0);
 
 class BlogsSection extends StatelessWidget {
-  const BlogsSection({super.key, required String imagePath});
+  const BlogsSection({super.key, required this.imagePath});
+
+  final String imagePath;
 
   @override
-
-   Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     // Get the screen width
     double screenWidth = MediaQuery.of(context).size.width;
 
@@ -17,35 +23,39 @@ class BlogsSection extends StatelessWidget {
     double titleFontSize = screenWidth < 600 ? 24.0 : 36.0; // Mobile: 24, Tablet/Desktop: 36
     double bodyFontSize = screenWidth < 600 ? 14.0 : 16.0; // Mobile: 14, Tablet/Desktop: 16
 
-
-  
     final List<Blog> blogs = [
       Blog(
-        title: '10 Realities you really want to reconsider before actual profession',
+        title: '10 Realities You Really Want to Reconsider Before Your Profession',
         date: '01/11/2021',
-        readTime: 'Free read', user: '', content: '',
+        readTime: 'Free read',
+        user: '',
+        content: '',
       ),
       Blog(
-        title: '20 facts you need to reconsider before your short career',
+        title: '20 Facts You Need to Reconsider Before Your Short Career',
         date: '10/11/2021',
-        readTime: '5min read', user: '', content: '',
+        readTime: '5 min read',
+        user: '',
+        content: '',
       ),
       Blog(
-        title: 'Discover career that matches your skills & interests in job',
+        title: 'Discover Careers That Match Your Skills & Interests',
         date: '17/02/2022',
-        readTime: '4min read', user: '', content: '',
+        readTime: '4 min read',
+        user: '',
+        content: '',
       ),
     ];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
+        Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
             'Read Our Daily Blogs',
             style: TextStyle(
-              fontSize: 24.0,
+              fontSize: titleFontSize,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -84,7 +94,14 @@ class BlogCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Image.network('https://via.placeholder.com/200x100', width: 200, height: 100, fit: BoxFit.cover),
+              CachedNetworkImage(
+                imageUrl: 'https://via.placeholder.com/200x100',
+                width: 200,
+                height: 100,
+                fit: BoxFit.cover,
+                placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
+              ),
               const SizedBox(height: 8.0),
               Text(
                 blog.title,

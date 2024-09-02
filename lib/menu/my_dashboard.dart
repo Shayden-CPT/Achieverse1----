@@ -1,21 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:achieverse/responsive_layout.dart';
 import 'package:achieverse/widgets/header_section.dart';
 import 'package:achieverse/widgets/nav_bar.dart';
 import 'package:achieverse/menu/menu_drawer.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:seo_renderer/seo_renderer.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// Define a simple provider
+final counterProvider = StateProvider<int>((ref) => 0);
 
 class MyDashboard extends StatelessWidget {
   final String userName;
   final String jobTitle;
   final String location;
   final String profileImageUrl;
+  final String backgroundImageUrl;
   final Color primaryColor;
   final Color secondaryColor;
-  final String backgroundImageUrl;
 
   const MyDashboard({
     super.key,
@@ -50,7 +55,7 @@ class MyDashboard extends StatelessWidget {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(backgroundImageUrl),
+            image: CachedNetworkImageProvider(backgroundImageUrl),
             fit: BoxFit.cover,
           ),
         ),
@@ -175,7 +180,7 @@ class MyDashboard extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 40,
-            backgroundImage: AssetImage(profileImageUrl),
+            backgroundImage: CachedNetworkImageProvider(profileImageUrl),
           ),
           const SizedBox(height: 16),
           Text(

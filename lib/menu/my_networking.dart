@@ -4,8 +4,11 @@ import 'package:achieverse/widgets/nav_bar.dart';
 import 'package:achieverse/menu/menu_drawer.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:seo_renderer/seo_renderer.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-
+// Define a simple provider
+final counterProvider = StateProvider<int>((ref) => 0);
 
 class MyNetworking extends StatelessWidget {
   const MyNetworking({super.key});
@@ -164,7 +167,7 @@ class PeopleHiring extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('People Hiring', style: Theme.of(context).textTheme.headLine5),
+            Text('People Hiring', style: Theme.of(context).textTheme.headlineSmall),
             const SizedBox(height: 16),
             Expanded(
               child: ListView.builder(
@@ -179,10 +182,6 @@ class PeopleHiring extends StatelessWidget {
       ),
     );
   }
-}
-
-extension on TextTheme {
-  get headLine5 => null;
 }
 
 class PeopleHiringItem extends StatelessWidget {

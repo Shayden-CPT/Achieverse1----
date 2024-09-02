@@ -13,6 +13,13 @@ import 'widgets/footer_section.dart';
 import 'widgets/dev_feed_widget.dart';
 import 'widgets/article_widget.dart';
 import 'menu/menu_drawer.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// Define a simple provider
+final counterProvider = StateProvider<int>((ref) => 0);
+
+
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -45,87 +52,56 @@ class HomePage extends StatelessWidget {
           builder: (context, sizingInformation) {
             return SingleChildScrollView(
               padding: EdgeInsets.symmetric(
-                horizontal: sizingInformation.deviceScreenType ==
-                        DeviceScreenType.mobile
-                    ? 16.0
-                    : 32.0,
+                horizontal: sizingInformation.deviceScreenType == DeviceScreenType.mobile ? 16.0 : 32.0,
                 vertical: 16.0,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _responsiveRow(
-                    sizingInformation,
-                    [
-                      const HeaderSection(
-                        imagePath: '',
-                      ),
-                      const StatsSection(
-                        imagePath: '',
-                      ),
-                    ],
+                  _lazyLoadWidget(
+                    _responsiveWidget(
+                      sizingInformation,
+                      const HeaderSection(imagePath: 'assets/images/header_image.jpg'),
+                      const StatsSection(imagePath: 'assets/images/stats_image.jpg'),
+                    ),
                   ),
-                  _responsiveRow(
-                    sizingInformation,
-                    [
-                      const PopularCoursesSection(
-                        imagePath: '',
-                      ),
-                      const InfoSection(
-                        imagePath: '',
-                      ),
-                    ],
+                  _lazyLoadWidget(
+                    _responsiveWidget(
+                      sizingInformation,
+                      const PopularCoursesSection(imagePath: 'assets/images/popular_courses_image.jpg'),
+                      const InfoSection(imagePath: 'assets/images/info_image.jpg'),
+                    ),
                   ),
-                  _responsiveRow(
-                    sizingInformation,
-                    [
-                      const TopCategoriesSection(
-                        imagePath: '',
-                      ),
-                      const MentorsSection(
-                        imagePath: '',
-                      ),
-                    ],
+                  _lazyLoadWidget(
+                    _responsiveWidget(
+                      sizingInformation,
+                      const TopCategoriesSection(imagePath: 'assets/images/top_categories_image.jpg'),
+                      const MentorsSection(imagePath: 'assets/images/mentors_image.jpg'),
+                    ),
                   ),
-                  _responsiveRow(
-                    sizingInformation,
-                    [
-                      const TestimonialsSection(
-                        imagePath: '',
-                      ),
-                      const BlogsSection(
-                        imagePath: '',
-                      ),
-                    ],
+                  _lazyLoadWidget(
+                    _responsiveWidget(
+                      sizingInformation,
+                      const TestimonialsSection(imagePath: 'assets/images/testimonials_image.jpg'),
+                      const BlogsSection(imagePath: 'assets/images/blogs_image.jpg'),
+                    ),
                   ),
-                  _responsiveRow(
-                    sizingInformation,
-                    [
-                      const DevFeedWidget(
-                        topic: 'Flutter',
-                        imagePath: '',
-                      ),
-                      const DevFeedWidget(
-                        topic: 'React JS',
-                        imagePath: '',
-                      ),
-                    ],
+                  _lazyLoadWidget(
+                    _responsiveWidget(
+                      sizingInformation,
+                      const DevFeedWidget(topic: 'Flutter', imagePath: 'assets/images/flutter_image.jpg'),
+                      const DevFeedWidget(topic: 'React JS', imagePath: 'assets/images/react_js_image.jpg'),
+                    ),
                   ),
-                  _responsiveRow(
-                    sizingInformation,
-                    [
-                      const ArticleWidget(
-                        topic: 'HTML/CSS',
-                        imagePath: '',
-                      ),
-                      const ArticleWidget(
-                        topic: 'C#',
-                        imagePath: '',
-                      ),
-                    ],
+                  _lazyLoadWidget(
+                    _responsiveWidget(
+                      sizingInformation,
+                      const ArticleWidget(topic: 'HTML/CSS', imagePath: 'assets/images/html_css_image.jpg'),
+                      const ArticleWidget(topic: 'C#', imagePath: 'assets/images/csharp_image.jpg'),
+                    ),
                   ),
-                  const FooterSection(
-                    imagePath: '',
+                  _lazyLoadWidget(
+                    const FooterSection(imagePath: 'assets/images/footer_image.jpg'),
                   ),
                 ],
               ),
@@ -136,33 +112,33 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _responsiveRow(
-      SizingInformation sizingInformation, List<Widget> children) {
+  Widget _lazyLoadWidget(Widget widget) {
+    return FutureBuilder(
+      future: Future.delayed(const Duration(milliseconds: 500), () => widget),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return snapshot.data as Widget;
+        } else {
+          return const Center(child: CircularProgressIndicator());
+        }
+      },
+    );
+  }
+
+  Widget _responsiveWidget(SizingInformation sizingInformation, Widget mobileWidget, Widget desktopWidget) {
     if (sizingInformation.deviceScreenType == DeviceScreenType.mobile) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: children
-            .map((child) => Padding(
-                  padding: const EdgeInsets.only(bottom: 16.0),
-                  child: child,
-                ))
-            .toList(),
+        children: [mobileWidget],
       );
     } else {
       return Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: children
-            .map(
-              (child) => Flexible(
-                fit: FlexFit.tight,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: child,
-                ),
-              ),
-            )
-            .toList(),
+        children: [
+          Flexible(fit: FlexFit.tight, child: Padding(padding: const EdgeInsets.all(8.0), child: mobileWidget)),
+          Flexible(fit: FlexFit.tight, child: Padding(padding: const EdgeInsets.all(8.0), child: desktopWidget)),
+        ],
       );
     }
   }

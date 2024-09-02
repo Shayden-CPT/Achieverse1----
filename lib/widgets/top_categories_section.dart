@@ -2,12 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:achieverse/responsive_layout.dart';
 import 'package:achieverse/widgets/header_section.dart';
 import 'package:achieverse/widgets/nav_bar.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// Define a simple provider
+final counterProvider = StateProvider<int>((ref) => 0);
 
 class TopCategoriesSection extends StatelessWidget {
   const TopCategoriesSection({super.key, required String imagePath});
 
   @override
-   Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     // Get the screen width
     double screenWidth = MediaQuery.of(context).size.width;
 
@@ -15,7 +20,15 @@ class TopCategoriesSection extends StatelessWidget {
     double titleFontSize = screenWidth < 600 ? 24.0 : 36.0; // Mobile: 24, Tablet/Desktop: 36
     double bodyFontSize = screenWidth < 600 ? 14.0 : 16.0; // Mobile: 14, Tablet/Desktop: 16
 
-    return const Column(
+    // Define categories
+    final List<Category> categories = [
+      Category(name: 'Academic', color: Colors.purple),
+      Category(name: 'Technical', color: Colors.blue),
+      Category(name: 'Vocational', color: Colors.orange),
+      Category(name: 'Others', color: Colors.yellow),
+    ];
+
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
@@ -23,27 +36,27 @@ class TopCategoriesSection extends StatelessWidget {
           child: Text(
             'Top Categories',
             style: TextStyle(
-              fontSize: 24.0,
+              fontSize: titleFontSize,
               fontWeight: FontWeight.bold,
             ),
           ),
         ),
         SizedBox(height: 16.0),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
-          child: SingleChildScrollView(
+        // Use ListView.builder for lazy loading of CategoryCards
+        SizedBox(
+          height: 120.0, // Set a fixed height for the scrolling area
+          child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                CategoryCard(category: 'Academic', color: Colors.purple),
-                SizedBox(width: 16),
-                CategoryCard(category: 'Technical', color: Colors.blue),
-                SizedBox(width: 16),
-                CategoryCard(category: 'Vocational', color: Colors.orange),
-                SizedBox(width: 16),
-                CategoryCard(category: 'Others', color: Colors.yellow),
-              ],
-            ),
+            itemCount: categories.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: CategoryCard(
+                  category: categories[index].name,
+                  color: categories[index].color,
+                ),
+              );
+            },
           ),
         ),
       ],
@@ -79,4 +92,11 @@ class CategoryCard extends StatelessWidget {
       ),
     );
   }
+}
+
+class Category {
+  final String name;
+  final Color color;
+
+  Category({required this.name, required this.color});
 }

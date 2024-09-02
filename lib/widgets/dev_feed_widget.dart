@@ -1,17 +1,22 @@
-// widgets/dev_feed_widget.dart
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// Define a simple provider
+final counterProvider = StateProvider<int>((ref) => 0);
 
 class DevFeedWidget extends StatelessWidget {
   final String topic;
+  final String imagePath;
 
-  const DevFeedWidget({super.key, required this.topic, required String imagePath});
+  const DevFeedWidget({super.key, required this.topic, required this.imagePath});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/images/dev.webp'),
+          image: AssetImage(imagePath),
           fit: BoxFit.cover,
         ),
       ),
@@ -48,19 +53,18 @@ class DevFeedWidget extends StatelessWidget {
   }
 }
 
-
-
 class ArticleWidget extends StatelessWidget {
   final String topic;
+  final String imagePath;
 
-  const ArticleWidget({super.key, required this.topic, required String imagePath});
+  const ArticleWidget({super.key, required this.topic, required this.imagePath});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/images/article_bg.jpg'),
+          image: AssetImage(imagePath),
           fit: BoxFit.cover,
         ),
       ),

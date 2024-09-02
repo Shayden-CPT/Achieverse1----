@@ -17,12 +17,12 @@
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="icon" type="image/png" href="favicon.png">
 
   <!-- Web App Manifest -->
   <link rel="manifest" href="manifest.json">
 
-  <!-- Preconnect and DNS Prefetch -->
+  <!-- Preconnect and DNS Prefetch for external resources -->
   <link rel="preconnect" href="https://your-cdn.com" crossorigin>
   <link rel="dns-prefetch" href="https://your-cdn.com">
 
@@ -36,10 +36,10 @@
       /* Prevent horizontal scrolling */
     }
 
-    /* Add more critical CSS rules here */
+    /* Inline additional critical CSS here */
   </style>
 
-  <!-- Preload important resources -->
+  <!-- Preload essential resources -->
   <link rel="preload" href="flutter_bootstrap.js" as="script">
   <link rel="preload" href="icons/Icon-192.png" as="image">
 
@@ -53,8 +53,8 @@
   <title>AchieVerse</title>
 
   <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-analytics.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js" async></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-analytics.js" async></script>
   <script>
     // Your web app's Firebase configuration
     const firebaseConfig = {
@@ -87,12 +87,11 @@
     }
   </script>
 
-  <!-- Lazy Loading JavaScript for Enhanced Control -->
+  <!-- Lazy Loading JavaScript for Images and Iframes -->
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       // Lazy loading images
       const lazyImages = document.querySelectorAll('img[data-src]');
-      
       if ('IntersectionObserver' in window) {
         const observer = new IntersectionObserver((entries, observer) => {
           entries.forEach(entry => {
@@ -116,7 +115,6 @@
 
       // Lazy loading iframes
       const lazyIframes = document.querySelectorAll('iframe[data-src]');
-      
       if ('IntersectionObserver' in window) {
         const observer = new IntersectionObserver((entries, observer) => {
           entries.forEach(entry => {
@@ -144,7 +142,7 @@
       continue.</strong>
   </noscript>
 
-  <!-- Main content and app bootstrapping -->
+  <!-- Main content -->
   <!-- Example of lazy-loaded images -->
   <img data-src="path/to/image1.jpg" alt="Description of image 1" class="lazy">
   <img data-src="path/to/image2.jpg" alt="Description of image 2" class="lazy">
@@ -152,6 +150,7 @@
   <!-- Example of lazy-loaded iframe -->
   <iframe data-src="https://example.com" width="600" height="400" class="lazy"></iframe>
 
+  <!-- Bootstrap JavaScript -->
   <script src="flutter_bootstrap.js" defer></script>
 </body>
 

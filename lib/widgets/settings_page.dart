@@ -1,6 +1,10 @@
-// settings_page.dart
 import 'package:flutter/material.dart';
-import 'nav_bar.dart';
+import 'package:achieverse/widgets/nav_bar.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// Define a simple provider
+final counterProvider = StateProvider<int>((ref) => 0);
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -11,10 +15,19 @@ class SettingsPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Settings'),
       ),
-      body: const Center(
-        child: Text('Settings content goes here'),
-      ),
+      body: const _SettingsContent(),
       bottomNavigationBar: const NavBar(),
+    );
+  }
+}
+
+class _SettingsContent extends StatelessWidget {
+  const _SettingsContent();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Text('Settings content goes here'),
     );
   }
 }

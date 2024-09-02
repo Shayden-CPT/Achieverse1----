@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import '../models/course.dart';
-import 'package:achieverse/responsive_layout.dart';
-import 'package:achieverse/widgets/header_section.dart';
-import 'package:achieverse/widgets/nav_bar.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// Define a simple provider
+final counterProvider = StateProvider<int>((ref) => 0);
 
 class PopularCoursesSection extends StatelessWidget {
   const PopularCoursesSection({super.key, required String imagePath});
@@ -13,10 +15,9 @@ class PopularCoursesSection extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
 
     // Define responsive text sizes
-    double titleFontSize =
-        screenWidth < 600 ? 24.0 : 36.0; // Mobile: 24, Tablet/Desktop: 36
-    double bodyFontSize =
-        screenWidth < 600 ? 14.0 : 16.0; // Mobile: 14, Tablet/Desktop: 16
+    double titleFontSize = screenWidth < 600 ? 24.0 : 36.0; // Mobile: 24, Tablet/Desktop: 36
+    double bodyFontSize = screenWidth < 600 ? 14.0 : 16.0; // Mobile: 14, Tablet/Desktop: 16
+
     final List<Course> courses = [
       Course(
         title: 'Digital Marketing & with Basics to Advance',
@@ -24,7 +25,7 @@ class PopularCoursesSection extends StatelessWidget {
         rating: 5.0,
         price: 19.60,
         originalPrice: 25.27,
-        imageUrl: 'assets/images/digital marketing.jpg',
+        imageUrl: 'assets/images/digital_marketing.jpg',
         description: 'Digital Marketing ,basics to advance',
       ),
       Course(
@@ -33,7 +34,7 @@ class PopularCoursesSection extends StatelessWidget {
         rating: 4.8,
         price: 15.33,
         originalPrice: 20.77,
-        imageUrl: '',
+        imageUrl: 'assets/images/design_thinking.jpg',
         description: '',
       ),
       Course(
@@ -42,7 +43,7 @@ class PopularCoursesSection extends StatelessWidget {
         rating: 4.9,
         price: 13.76,
         originalPrice: 18.67,
-        imageUrl: '',
+        imageUrl: 'assets/images/html_basics.jpg',
         description: '',
       ),
       Course(
@@ -51,7 +52,7 @@ class PopularCoursesSection extends StatelessWidget {
         rating: 4.5,
         price: 16.88,
         originalPrice: 20.77,
-        imageUrl: '',
+        imageUrl: 'assets/images/ux_design.jpg',
         description: '',
       ),
       Course(
@@ -60,7 +61,7 @@ class PopularCoursesSection extends StatelessWidget {
         rating: 4.5,
         price: 16.88,
         originalPrice: 20.77,
-        imageUrl: '',
+        imageUrl: 'assets/images/flutter_basics.jpg',
         description: '',
       ),
       Course(
@@ -69,7 +70,7 @@ class PopularCoursesSection extends StatelessWidget {
         rating: 4.5,
         price: 16.88,
         originalPrice: 20.77,
-        imageUrl: '',
+        imageUrl: 'assets/images/react_js.jpg',
         description: '',
       ),
     ];
@@ -77,28 +78,34 @@ class PopularCoursesSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
             'Popular Courses',
             style: TextStyle(
-              fontSize: 24.0,
+              fontSize: titleFontSize,
               fontWeight: FontWeight.bold,
             ),
           ),
         ),
         const SizedBox(height: 16.0),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children:
-                courses.map((course) => CourseCard(course: course)).toList(),
+        // Use ListView.builder for better performance
+        SizedBox(
+          height: 300, // Set height to control the height of the ListView
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: courses.length,
+            itemBuilder: (context, index) {
+              return CourseCard(course: courses[index], fontSize: bodyFontSize);
+            },
           ),
         ),
         const SizedBox(height: 16.0),
         Center(
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              // Implement the 'View All' functionality
+            },
             child: const Text('View All'),
           ),
         ),
@@ -109,8 +116,9 @@ class PopularCoursesSection extends StatelessWidget {
 
 class CourseCard extends StatelessWidget {
   final Course course;
+  final double fontSize;
 
-  const CourseCard({super.key, required this.course});
+  const CourseCard({super.key, required this.course, required this.fontSize});
 
   @override
   Widget build(BuildContext context) {
@@ -122,21 +130,47 @@ class CourseCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              course.imageUrl.isNotEmpty
+                ? CachedNetworkImage(
+                    imageUrl: course.imageUrl,
+                    placeholder: (context, url) => const CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => const Icon(Icons.error),
+                  )
+                : const CircleAvatar(
+                    radius: 32.0,
+                    child: Icon(Icons.book),
+                  ),
+              const SizedBox(height: 8.0),
               Text(
                 course.title,
-                style: const TextStyle(fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: fontSize,
+                ),
               ),
-              Text('by ${course.author}'),
+              Text(
+                'by ${course.author}',
+                style: TextStyle(fontSize: fontSize),
+              ),
               Row(
                 children: [
                   const Icon(Icons.star, color: Colors.amber, size: 16.0),
-                  Text('${course.rating}'),
+                  Text(
+                    '${course.rating}',
+                    style: TextStyle(fontSize: fontSize),
+                  ),
                 ],
               ),
-              Text('\$${course.price}'),
+              Text(
+                '\$${course.price}',
+                style: TextStyle(fontSize: fontSize),
+              ),
               Text(
                 '\$${course.originalPrice}',
-                style: const TextStyle(decoration: TextDecoration.lineThrough),
+                style: TextStyle(
+                  fontSize: fontSize,
+                  decoration: TextDecoration.lineThrough,
+                ),
               ),
             ],
           ),

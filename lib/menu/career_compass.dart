@@ -4,6 +4,11 @@ import 'package:achieverse/widgets/nav_bar.dart';
 import 'package:achieverse/menu/menu_drawer.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:seo_renderer/seo_renderer.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// Define a simple provider
+final counterProvider = StateProvider<int>((ref) => 0);
 
 class CareerCompass extends StatelessWidget {
   const CareerCompass({super.key});
@@ -83,9 +88,9 @@ class CareerCompass extends StatelessWidget {
           if (MediaQuery.of(context).size.width > 600)
             _buildUserProfile(context),
           const SizedBox(height: 24),
-          _buildInDemandCareers(context),
+          _lazyLoadWidget(_buildInDemandCareers(context)),
           const SizedBox(height: 24),
-          _buildCareerSuccessTips(context),
+          _lazyLoadWidget(_buildCareerSuccessTips(context)),
         ],
       ),
     );
@@ -97,9 +102,9 @@ class CareerCompass extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildExploreOtherCareers(context),
+          _lazyLoadWidget(_buildExploreOtherCareers(context)),
           const SizedBox(height: 24),
-          _buildRecommendedResources(context),
+          _lazyLoadWidget(_buildRecommendedResources(context)),
         ],
       ),
     );
@@ -112,10 +117,14 @@ class CareerCompass extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            const CircleAvatar(
-              radius: 50,
-              backgroundImage:
-                  NetworkImage('https://example.com/user-avatar.jpg'),
+            CachedNetworkImage(
+              imageUrl: 'https://example.com/user-avatar.jpg',
+              imageBuilder: (context, imageProvider) => CircleAvatar(
+                radius: 50,
+                backgroundImage: imageProvider,
+              ),
+              placeholder: (context, url) => const CircularProgressIndicator(),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
             ),
             const SizedBox(height: 16),
             const Text(
@@ -304,6 +313,21 @@ class CareerCompass extends StatelessWidget {
       title: Text(title),
       onTap: () {
         // Open resource
+      },
+    );
+  }
+
+  Widget _lazyLoadWidget(Widget widget) {
+    return FutureBuilder(
+      future: Future.delayed(const Duration(milliseconds: 500), () => widget),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else {
+          return snapshot.data!;
+        }
       },
     );
   }

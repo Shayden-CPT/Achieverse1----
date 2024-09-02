@@ -5,9 +5,14 @@ import 'package:achieverse/widgets/nav_bar.dart';
 import 'package:achieverse/menu/menu_drawer.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:seo_renderer/seo_renderer.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// Define a simple provider
+final counterProvider = StateProvider<int>((ref) => 0);
 
 class MyGoals extends StatelessWidget {
-   MyGoals({super.key});
+  MyGoals({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,17 +24,20 @@ class MyGoals extends StatelessWidget {
       drawer: const MenuDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: GridView.count(
-          crossAxisCount: 2,
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
-          children: List.generate(goals.length, (index) {
+        child: GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 16,
+            mainAxisSpacing: 16,
+          ),
+          itemCount: goals.length,
+          itemBuilder: (context, index) {
             return GoalTile(
               title: goals[index]['title']!,
               progress: goals[index]['progress']!,
               icon: goals[index]['icon']!,
             );
-          }),
+          },
         ),
       ),
     );
@@ -86,7 +94,7 @@ class _GoalTileState extends State<GoalTile> with SingleTickerProviderStateMixin
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );
-    _animation = Tween<double>(begin: 1.0, end: 1.2).animate(_controller);
+    _animation = Tween<double>(begin: 1.0, end: 1.1).animate(_controller);
   }
 
   @override

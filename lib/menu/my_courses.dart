@@ -1,13 +1,17 @@
-import 'package:achieverse/menu/menu_drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:achieverse/menu/menu_drawer.dart';
 import 'package:achieverse/widgets/header_section.dart';
-import 'package:achieverse/widgets/nav_bar.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:seo_renderer/seo_renderer.dart';
+import 'package:cached_network_image/cached_network_image.dart'; // Add this dependency for caching
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// Define a simple provider
+final counterProvider = StateProvider<int>((ref) => 0);
 
 
-class CourseApp extends StatelessWidget {
-  const CourseApp({super.key});
+
+class MyCourses extends StatelessWidget {
+  const MyCourses({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,13 +21,7 @@ class CourseApp extends StatelessWidget {
         primarySwatch: Colors.teal,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Course Offerings'),
-        ),
-        drawer: const MenuDrawer(),
-        body: const CourseHomePage(),
-      ),
+      home: const CourseHomePage(),
     );
   }
 }
@@ -37,32 +35,18 @@ class CourseHomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Course Offerings'),
       ),
+      drawer: const MenuDrawer(),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const HeaderSection(imagePath: '',),
+            const HeaderSection(imagePath: ''),
             CourseSection(
               title: 'Short Courses',
-              courses: [
-                CourseItem(title: 'HTML & CSS', description: 'Learn the basics of web development with HTML and CSS.'),
-                CourseItem(title: 'JavaScript', description: 'Master the fundamentals of JavaScript for interactive web applications.'),
-                CourseItem(title: 'React JS', description: 'Build dynamic user interfaces with React JS.'),
-                CourseItem(title: 'Flutter & Dart', description: 'Develop beautiful mobile applications using Flutter and Dart.'),
-                CourseItem(title: 'Firebase', description: 'Learn how to use Firebase for backend services in your applications.'),
-              ],
+              courses: shortCourses,
             ),
             CourseSection(
               title: 'Long Courses',
-              courses: [
-                CourseItem(title: 'Web Development', description: 'A comprehensive course covering front-end and back-end web development.'),
-                CourseItem(title: 'Android Development', description: 'Learn to build Android applications from scratch.'),
-                CourseItem(title: 'iOS Development', description: 'Master the skills needed to develop iOS applications.'),
-                CourseItem(title: 'React Native', description: 'Create cross-platform mobile applications using React Native.'),
-                CourseItem(title: '.NET Maui', description: 'Build cross-platform applications with .NET Maui.'),
-                CourseItem(title: 'Physics', description: 'Understand the fundamental principles of physics.'),
-                CourseItem(title: 'C#', description: 'Learn C# programming for various applications.'),
-                CourseItem(title: 'C++', description: 'Master C++ for high-performance applications.'),
-              ],
+              courses: longCourses,
             ),
           ],
         ),
@@ -72,7 +56,9 @@ class CourseHomePage extends StatelessWidget {
 }
 
 class HeaderSection extends StatelessWidget {
-  const HeaderSection({super.key, required String imagePath});
+  const HeaderSection({super.key, required this.imagePath});
+
+  final String imagePath;
 
   @override
   Widget build(BuildContext context) {
@@ -166,3 +152,23 @@ class CourseItem {
 
   CourseItem({required this.title, required this.description});
 }
+
+// Example data for courses
+final List<CourseItem> shortCourses = [
+  CourseItem(title: 'HTML & CSS', description: 'Learn the basics of web development with HTML and CSS.'),
+  CourseItem(title: 'JavaScript', description: 'Master the fundamentals of JavaScript for interactive web applications.'),
+  CourseItem(title: 'React JS', description: 'Build dynamic user interfaces with React JS.'),
+  CourseItem(title: 'Flutter & Dart', description: 'Develop beautiful mobile applications using Flutter and Dart.'),
+  CourseItem(title: 'Firebase', description: 'Learn how to use Firebase for backend services in your applications.'),
+];
+
+final List<CourseItem> longCourses = [
+  CourseItem(title: 'Web Development', description: 'A comprehensive course covering front-end and back-end web development.'),
+  CourseItem(title: 'Android Development', description: 'Learn to build Android applications from scratch.'),
+  CourseItem(title: 'iOS Development', description: 'Master the skills needed to develop iOS applications.'),
+  CourseItem(title: 'React Native', description: 'Create cross-platform mobile applications using React Native.'),
+  CourseItem(title: '.NET Maui', description: 'Build cross-platform applications with .NET Maui.'),
+  CourseItem(title: 'Physics', description: 'Understand the fundamental principles of physics.'),
+  CourseItem(title: 'C#', description: 'Learn C# programming for various applications.'),
+  CourseItem(title: 'C++', description: 'Master C++ for high-performance applications.'),
+];

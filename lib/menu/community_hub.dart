@@ -4,6 +4,11 @@ import 'package:achieverse/widgets/nav_bar.dart';
 import 'package:achieverse/menu/menu_drawer.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:seo_renderer/seo_renderer.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// Define a simple provider
+final counterProvider = StateProvider<int>((ref) => 0);
 
 class CommunityHub extends StatelessWidget {
   const CommunityHub({super.key});
@@ -15,7 +20,7 @@ class CommunityHub extends StatelessWidget {
         title: const Text('Community Hub'),
         backgroundColor: Colors.tealAccent,
       ),
-      drawer: const MenuDrawer(), // Include the menu drawer here
+      drawer: const MenuDrawer(),
       body: LayoutBuilder(
         builder: (context, constraints) {
           if (constraints.maxWidth > 1200) {
@@ -76,38 +81,20 @@ class CommunityHub extends StatelessWidget {
       child: Column(
         children: [
           // Header Image
-          Container(
-            height: 200,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: NetworkImage('https://example.com/header-image.jpg'),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
+          _buildHeaderImage(),
           const SizedBox(height: 16),
 
           // Welcome Text
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              'Welcome to the Community Hub!',
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    color: Colors.teal,
-                    fontWeight: FontWeight.bold,
-                  ),
-              textAlign: TextAlign.center,
-            ),
-          ),
+          _buildWelcomeText(context),
 
           // Message Section
-          _buildMessageSection(context),
+          _lazyLoadWidget(_buildMessageSection(context)),
 
           // Comments Section
-          _buildCommentsSection(context),
+          _lazyLoadWidget(_buildCommentsSection(context)),
 
           // Forum Section
-          _buildForumSection(context),
+          _lazyLoadWidget(_buildForumSection(context)),
         ],
       ),
     );
@@ -117,10 +104,47 @@ class CommunityHub extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          _buildUserProfile(context),
-          _buildNotifications(context),
-          _buildActiveUsers(context),
+          _lazyLoadWidget(_buildUserProfile(context)),
+          _lazyLoadWidget(_buildNotifications(context)),
+          _lazyLoadWidget(_buildActiveUsers(context)),
         ],
+      ),
+    );
+  }
+
+  Widget _buildHeaderImage() {
+    return CachedNetworkImage(
+      imageUrl: 'https://example.com/header-image.jpg',
+      imageBuilder: (context, imageProvider) => Container(
+        height: 200,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: imageProvider,
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+      placeholder: (context, url) => const SizedBox(
+        height: 200,
+        child: Center(child: CircularProgressIndicator()),
+      ),
+      errorWidget: (context, url, error) => const SizedBox(
+        height: 200,
+        child: Center(child: Icon(Icons.error)),
+      ),
+    );
+  }
+
+  Widget _buildWelcomeText(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Text(
+        'Welcome to the Community Hub!',
+        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+              color: Colors.teal,
+              fontWeight: FontWeight.bold,
+            ),
+        textAlign: TextAlign.center,
       ),
     );
   }
@@ -218,9 +242,20 @@ class CommunityHub extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CircleAvatar(
-          backgroundImage: NetworkImage('https://example.com/$username-avatar.jpg'),
-          radius: 20,
+        CachedNetworkImage(
+          imageUrl: 'https://example.com/$username-avatar.jpg',
+          imageBuilder: (context, imageProvider) => CircleAvatar(
+            backgroundImage: imageProvider,
+            radius: 20,
+          ),
+          placeholder: (context, url) => const CircleAvatar(
+            radius: 20,
+            child: CircularProgressIndicator(),
+          ),
+          errorWidget: (context, url, error) => const CircleAvatar(
+            radius: 20,
+            child: Icon(Icons.error),
+          ),
         ),
         const SizedBox(width: 8),
         Expanded(
@@ -251,9 +286,20 @@ class CommunityHub extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
-          const CircleAvatar(
-            backgroundImage: NetworkImage('https://example.com/current-user-avatar.jpg'),
-            radius: 50,
+          CachedNetworkImage(
+            imageUrl: 'https://example.com/current-user-avatar.jpg',
+            imageBuilder: (context, imageProvider) => CircleAvatar(
+              backgroundImage: imageProvider,
+              radius: 50,
+            ),
+            placeholder: (context, url) => const CircleAvatar(
+              radius: 50,
+              child: CircularProgressIndicator(),
+            ),
+            errorWidget: (context, url, error) => const CircleAvatar(
+              radius: 50,
+              child: Icon(Icons.error),
+            ),
           ),
           const SizedBox(height: 8),
           const Text('Current User', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
@@ -289,9 +335,20 @@ class CommunityHub extends StatelessWidget {
 
   Widget _buildNotificationItem(String message) {
     return ListTile(
-      leading: const CircleAvatar(
-        backgroundImage: NetworkImage('https://example.com/notification-avatar.jpg'),
-        radius: 20,
+      leading: CachedNetworkImage(
+        imageUrl: 'https://example.com/notification-avatar.jpg',
+        imageBuilder: (context, imageProvider) => CircleAvatar(
+          backgroundImage: imageProvider,
+          radius: 20,
+        ),
+        placeholder: (context, url) => const CircleAvatar(
+          radius: 20,
+          child: CircularProgressIndicator(),
+        ),
+        errorWidget: (context, url, error) => const CircleAvatar(
+          radius: 20,
+          child: Icon(Icons.error),
+        ),
       ),
       title: Text(message),
       onTap: () {
@@ -316,14 +373,40 @@ class CommunityHub extends StatelessWidget {
             runSpacing: 8,
             children: List.generate(
               10,
-              (index) => CircleAvatar(
-                backgroundImage: NetworkImage('https://example.com/user$index-avatar.jpg'),
-                radius: 20,
+              (index) => CachedNetworkImage(
+                imageUrl: 'https://example.com/user$index-avatar.jpg',
+                imageBuilder: (context, imageProvider) => CircleAvatar(
+                  backgroundImage: imageProvider,
+                  radius: 20,
+                ),
+                placeholder: (context, url) => const CircleAvatar(
+                  radius: 20,
+                  child: CircularProgressIndicator(),
+                ),
+                errorWidget: (context, url, error) => const CircleAvatar(
+                  radius: 20,
+                  child: Icon(Icons.error),
+                ),
               ),
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _lazyLoadWidget(Widget widget) {
+    return FutureBuilder(
+      future: Future.delayed(const Duration(milliseconds: 500), () => widget),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const SizedBox(height: 200, child: Center(child: CircularProgressIndicator()));
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else {
+          return snapshot.data!;
+        }
+      },
     );
   }
 }

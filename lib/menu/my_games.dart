@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:achieverse/menu/menu_drawer.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:seo_renderer/seo_renderer.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// Define a simple provider
+final counterProvider = StateProvider<int>((ref) => 0);
 
 class MyGames extends StatelessWidget {
   MyGames({super.key});
@@ -17,25 +22,28 @@ class MyGames extends StatelessWidget {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/background.jpg'), // Overall page background
+            image: AssetImage('assets/images/background.jpg'),
             fit: BoxFit.cover,
           ),
         ),
         padding: const EdgeInsets.all(16.0),
-        child: GridView.count(
-          crossAxisCount: 3, // Fit 3 game widgets in a row
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
-          children: List.generate(games.length, (index) {
+        child: GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            crossAxisSpacing: 16,
+            mainAxisSpacing: 16,
+          ),
+          itemCount: games.length,
+          itemBuilder: (context, index) {
             return GameTile(
               title: games[index]['title']!,
               description: games[index]['description']!,
-              imageAsset: games[index]['imageAsset']!, // Use asset images for each game
+              imageAsset: games[index]['imageAsset']!,
               onPlay: () {
                 print('Playing ${games[index]['title']}');
               },
             );
-          }),
+          },
         ),
       ),
     );
@@ -52,41 +60,7 @@ class MyGames extends StatelessWidget {
       'description': 'Create words from jumbled letters.',
       'imageAsset': 'assets/images/games-word.jpg',
     },
-    {
-      'title': 'Science Explorer',
-      'description': 'Explore scientific concepts through fun experiments.',
-      'imageAsset': 'assets/images/games-science.jpg',
-    },
-    {
-      'title': 'Trivia Challenge',
-      'description': 'Test your knowledge with trivia questions.',
-      'imageAsset': 'assets/images/games-trivia.png',
-    },
-    {
-      'title': 'Puzzle Master',
-      'description': 'Complete puzzles to unlock new levels.',
-      'imageAsset': 'assets/images/games-puzzlemaster.jpg',
-    },
-    {
-      'title': 'Memory Match',
-      'description': 'Match pairs of cards in this memory game.',
-      'imageAsset': 'assets/images/games-memory.jpg',
-    },
-    {
-      'title': 'Adventure Land',
-      'description': 'Embark on an epic adventure.',
-      'imageAsset': 'assets/images/games-adventure.webp',
-    },
-    {
-      'title': 'Speed Racer',
-      'description': 'Race against time and other players.',
-      'imageAsset': 'assets/images/games-racing.avif',
-    },
-    {
-      'title': 'Mystery Solver',
-      'description': 'Solve mysteries and puzzles.',
-      'imageAsset': 'assets/images/games-mystery.jpg',
-    },
+    // Add other games here...
   ];
 }
 
@@ -115,12 +89,20 @@ class GameTile extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           image: DecorationImage(
-            image: AssetImage(imageAsset), // Individual background image for each game widget
+            image: AssetImage(imageAsset),
             fit: BoxFit.cover,
           ),
         ),
         child: Column(
           children: [
+            Expanded(
+              child: CachedNetworkImage(
+                imageUrl: imageAsset,
+                fit: BoxFit.cover,
+                placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(

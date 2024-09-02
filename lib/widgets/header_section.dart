@@ -10,7 +10,12 @@ import 'package:achieverse/widgets/stats_section.dart';
 import 'package:achieverse/widgets/testimonials_section.dart';
 import 'package:achieverse/widgets/top_categories_section.dart';
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// Define a simple provider
+final counterProvider = StateProvider<int>((ref) => 0);
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -35,7 +40,7 @@ class HomePage extends StatelessWidget {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/leading frameworks.jpg'),
+            image: AssetImage('assets/images/leading_frameworks.jpg'),
             fit: BoxFit.cover,
           ),
         ),
@@ -56,8 +61,7 @@ class HomePage extends StatelessWidget {
                     sizingInformation,
                     [
                       const HeaderSection(
-                          imagePath:
-                              'assets/images/.flutter center - node,react,swiftjpg'),
+                          imagePath: 'assets/images/flutter_center.jpg'),
                       const StatsSection(imagePath: 'assets/images/stats.jpg'),
                     ],
                   ),
@@ -136,8 +140,7 @@ class HomePage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: children
             .map(
-              (child) => Flexible(
-                fit: FlexFit.tight,
+              (child) => Expanded(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: child,

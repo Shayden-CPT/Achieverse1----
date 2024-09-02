@@ -3,6 +3,11 @@ import '../models/testimonial.dart';
 import 'package:achieverse/responsive_layout.dart';
 import 'package:achieverse/widgets/header_section.dart';
 import 'package:achieverse/widgets/nav_bar.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// Define a simple provider
+final counterProvider = StateProvider<int>((ref) => 0);
 
 class TestimonialsSection extends StatelessWidget {
   const TestimonialsSection({super.key, required String imagePath});
@@ -52,11 +57,19 @@ class TestimonialsSection extends StatelessWidget {
             ),
           ),
         ),
-       const SizedBox(height: 16.0),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: testimonials.map((testimonial) => TestimonialCard(testimonial: testimonial)).toList(),
+        const SizedBox(height: 16.0),
+        // Use ListView.builder for lazy loading of TestimonialCards
+        SizedBox(
+          height: 200.0, // Set a fixed height for the scrolling area
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: testimonials.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: TestimonialCard(testimonial: testimonials[index]),
+              );
+            },
           ),
         ),
       ],
@@ -71,30 +84,35 @@ class TestimonialCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 300,
-      child: Card(
-        color: Colors.yellow.withOpacity(0.2),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                testimonial.name,
-                style: const TextStyle(fontWeight: FontWeight.bold),
+    return Card(
+      color: Colors.yellow.withOpacity(0.2),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              testimonial.name,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18.0, // Adjust as needed for responsiveness
               ),
-              const SizedBox(height: 8.0),
-              Text(testimonial.review),
-              const SizedBox(height: 8.0),
-              Row(
-                children: [
-                  const Icon(Icons.star, color: Colors.amber, size: 16.0),
-                  Text('${testimonial.rating}'),
-                ],
+            ),
+            const SizedBox(height: 8.0),
+            Text(
+              testimonial.review,
+              style: const TextStyle(
+                fontSize: 14.0, // Adjust as needed for responsiveness
               ),
-            ],
-          ),
+            ),
+            const SizedBox(height: 8.0),
+            Row(
+              children: [
+                const Icon(Icons.star, color: Colors.amber, size: 16.0),
+                Text('${testimonial.rating}'),
+              ],
+            ),
+          ],
         ),
       ),
     );

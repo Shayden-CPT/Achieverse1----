@@ -10,7 +10,11 @@ import 'package:achieverse/menu/my_rewards.dart';
 import 'package:achieverse/menu/career_compass.dart';
 import 'package:achieverse/menu/my_networking.dart';
 import 'package:achieverse/home_page.dart';
-import 'package:seo_renderer/seo_renderer.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// Define a simple provider
+final counterProvider = StateProvider<int>((ref) => 0);
 
 class MenuDrawer extends StatelessWidget {
   const MenuDrawer({super.key});
@@ -30,17 +34,10 @@ class MenuDrawer extends StatelessWidget {
                 child: Row(
                   children: [
                     CircleAvatar(
-                      radius: sizingInformation.deviceScreenType ==
-                              DeviceScreenType.mobile
-                          ? 24.0
-                          : 32.0,
-                      backgroundImage: const AssetImage('path_to_user_image'),
+                      radius: sizingInformation.deviceScreenType == DeviceScreenType.mobile ? 24.0 : 32.0,
+                      backgroundImage: const AssetImage('assets/images/profile_image.png'), // Update with actual path
                     ),
-                    SizedBox(
-                        width: sizingInformation.deviceScreenType ==
-                                DeviceScreenType.mobile
-                            ? 8.0
-                            : 16.0),
+                    SizedBox(width: sizingInformation.deviceScreenType == DeviceScreenType.mobile ? 8.0 : 16.0),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,19 +47,13 @@ class MenuDrawer extends StatelessWidget {
                             'Shayden',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: sizingInformation.deviceScreenType ==
-                                      DeviceScreenType.mobile
-                                  ? 16.0
-                                  : 18.0,
+                              fontSize: sizingInformation.deviceScreenType == DeviceScreenType.mobile ? 16.0 : 18.0,
                             ),
                           ),
                           Text(
                             'Software Engineer',
                             style: TextStyle(
-                              fontSize: sizingInformation.deviceScreenType ==
-                                      DeviceScreenType.mobile
-                                  ? 12.0
-                                  : 14.0,
+                              fontSize: sizingInformation.deviceScreenType == DeviceScreenType.mobile ? 12.0 : 14.0,
                             ),
                           ),
                         ],
@@ -95,10 +86,8 @@ class MenuDrawer extends StatelessWidget {
                               userName: 'Shayden',
                               jobTitle: 'Software Engineer',
                               location: 'Cape Town, South Africa',
-                              profileImageUrl:
-                                  'https://example.com/profile.jpg',
-                              backgroundImageUrl:
-                                  'https://example.com/background.jpg',
+                              profileImageUrl: 'https://example.com/profile.jpg',
+                              backgroundImageUrl: 'https://example.com/background.jpg',
                             )),
                   );
                 },
@@ -111,8 +100,7 @@ class MenuDrawer extends StatelessWidget {
                 () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => const CommunityHub()),
+                    MaterialPageRoute(builder: (context) =>  CommunityHub()),
                   );
                 },
                 sizingInformation,
@@ -124,7 +112,7 @@ class MenuDrawer extends StatelessWidget {
                 () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const Messaging()),
+                    MaterialPageRoute(builder: (context) =>  Messaging()),
                   );
                 },
                 sizingInformation,
@@ -136,7 +124,7 @@ class MenuDrawer extends StatelessWidget {
                 () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const CourseApp()),
+                    MaterialPageRoute(builder: (context) =>  MyCourses()),
                   );
                 },
                 sizingInformation,
@@ -148,7 +136,7 @@ class MenuDrawer extends StatelessWidget {
                 () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => MyGoals()),
+                    MaterialPageRoute(builder: (context) =>  MyGoals()),
                   );
                 },
                 sizingInformation,
@@ -160,7 +148,7 @@ class MenuDrawer extends StatelessWidget {
                 () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => MyRewards()),
+                    MaterialPageRoute(builder: (context) =>  MyRewards()),
                   );
                 },
                 sizingInformation,
@@ -172,7 +160,7 @@ class MenuDrawer extends StatelessWidget {
                 () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => MyGames()),
+                    MaterialPageRoute(builder: (context) =>  MyGames()),
                   );
                 },
                 sizingInformation,
@@ -184,8 +172,7 @@ class MenuDrawer extends StatelessWidget {
                 () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => const CareerCompass()),
+                    MaterialPageRoute(builder: (context) => const CareerCompass()),
                   );
                 },
                 sizingInformation,
@@ -197,8 +184,7 @@ class MenuDrawer extends StatelessWidget {
                 () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => const MyNetworking()),
+                    MaterialPageRoute(builder: (context) => const MyNetworking()),
                   );
                 },
                 sizingInformation,
@@ -218,17 +204,10 @@ class MenuDrawer extends StatelessWidget {
     SizingInformation sizingInformation,
   ) {
     return ListTile(
-      leading: Icon(icon,
-          size: sizingInformation.deviceScreenType == DeviceScreenType.mobile
-              ? 20.0
-              : 24.0),
+      leading: Icon(icon, size: sizingInformation.deviceScreenType == DeviceScreenType.mobile ? 20.0 : 24.0),
       title: Text(
         title,
-        style: TextStyle(
-            fontSize:
-                sizingInformation.deviceScreenType == DeviceScreenType.mobile
-                    ? 14.0
-                    : 16.0),
+        style: TextStyle(fontSize: sizingInformation.deviceScreenType == DeviceScreenType.mobile ? 14.0 : 16.0),
       ),
       onTap: onTap,
     );

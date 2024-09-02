@@ -1,35 +1,54 @@
 import 'package:flutter/material.dart';
-import 'package:achieverse/responsive_layout.dart';
-import 'package:achieverse/widgets/nav_bar.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// Define a simple provider
+final counterProvider = StateProvider<int>((ref) => 0);
 
 class FooterSection extends StatelessWidget {
-  const FooterSection({super.key, required String imagePath});
+  final String imagePath;
+
+  const FooterSection({super.key, required this.imagePath});
 
   @override
   Widget build(BuildContext context) {
     // Get the screen width
     double screenWidth = MediaQuery.of(context).size.width;
+
     // Define responsive text sizes
     double titleFontSize = screenWidth < 600 ? 24.0 : 36.0; // Mobile: 24, Tablet/Desktop: 36
     double bodyFontSize = screenWidth < 600 ? 14.0 : 16.0; // Mobile: 14, Tablet/Desktop: 16
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: screenWidth < 600 ? 16.0 : 32.0),
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage(imagePath),
+          fit: BoxFit.cover,
+        ),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Divider(),
           const SizedBox(height: 16.0),
-          const Text(
+          Text(
             'Achieverse',
             style: TextStyle(
-              fontSize: 24.0,
+              fontSize: titleFontSize,
               fontWeight: FontWeight.bold,
+              color: Colors.white, // Ensure text is readable on background image
             ),
           ),
           const SizedBox(height: 8.0),
-          const Text('Contact us: +27 074 670 8097'),
-          const Text('Email: www.redacademy.co.za'),
+          Text(
+            'Contact us: +27 074 670 8097',
+            style: TextStyle(fontSize: bodyFontSize, color: Colors.white),
+          ),
+          Text(
+            'Email: www.redacademy.co.za',
+            style: TextStyle(fontSize: bodyFontSize, color: Colors.white),
+          ),
           const SizedBox(height: 16.0),
           Wrap(
             spacing: 32,
@@ -38,37 +57,17 @@ class FooterSection extends StatelessWidget {
               _buildFooterColumn('Menu', ['Home', 'Courses', 'About Us', 'Mentors', 'Blog']),
               _buildFooterColumn('Company', ['Support', 'Careers', 'Privacy Policy', 'Terms of Service']),
               _buildFooterColumn('Support', ['Help Center', 'FAQs', 'Contact Us']),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Subscribe to our Newsletter',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 8.0),
-                  SizedBox(
-                    width: 300,
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Enter your email',
-                        suffixIcon: ElevatedButton(
-                          onPressed: () {},
-                          child: const Text('Subscribe Now'),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              _subscriptionSection(),
             ],
           ),
           const SizedBox(height: 16.0),
           const Divider(),
           const SizedBox(height: 16.0),
           const Center(
-            child: Text('© 2024 Achieverse. All rights reserved.'),
+            child: Text(
+              '© 2024 Achieverse. All rights reserved.',
+              style: TextStyle(color: Colors.white),
+            ),
           ),
           const SizedBox(height: 16.0),
           const Center(
@@ -77,13 +76,16 @@ class FooterSection extends StatelessWidget {
               children: [
                 Text('Made with '),
                 Icon(Icons.favorite, color: Colors.red, size: 18),
-                Text(' by Red Academy'),
+                Text(' by Red Academy', style: TextStyle(color: Colors.white)),
               ],
             ),
           ),
           const SizedBox(height: 16.0),
           const Center(
-            child: Text('Powered by Flutter'),
+            child: Text(
+              'Powered by Flutter',
+              style: TextStyle(color: Colors.white),
+            ),
           ),
         ],
       ),
@@ -98,10 +100,46 @@ class FooterSection extends StatelessWidget {
           title,
           style: const TextStyle(
             fontWeight: FontWeight.bold,
+            color: Colors.white, // Ensure text is readable on background image
           ),
         ),
         const SizedBox(height: 8.0),
-        ...items.map((item) => Text(item)),
+        ...items.map((item) => Text(
+          item,
+          style: const TextStyle(color: Colors.white),
+        )),
+      ],
+    );
+  }
+
+  Widget _subscriptionSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Subscribe to our Newsletter',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        const SizedBox(height: 8.0),
+        SizedBox(
+          width: 300,
+          child: TextField(
+            decoration: InputDecoration(
+              hintText: 'Enter your email',
+              hintStyle: TextStyle(color: Colors.white54),
+              suffixIcon: ElevatedButton(
+                onPressed: () {},
+                child: const Text('Subscribe Now'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blueGrey, // Change button color for better contrast
+                ),
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
