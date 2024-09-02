@@ -1,9 +1,10 @@
-import 'package:achieverse/lib/responsive_wrapper.dart';
-import 'package:flutter/material.dart';
-import 'package:achieverse/login/login_screen.dart';
-import 'package:achieverse/home_page.dart';
+import 'package:achieverse/responsive_wrapper.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:achieverse/login/login_screen.dart';
+import 'package:achieverse/network_service.dart';
+import 'package:achieverse/home_page.dart';
 
 
 void main() async {

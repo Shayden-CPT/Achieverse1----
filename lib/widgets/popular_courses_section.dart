@@ -1,6 +1,8 @@
+import 'package:achieverse/responsive_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../models/course.dart';
+import 'package:achieverse/network_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Define a simple provider

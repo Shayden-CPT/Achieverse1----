@@ -1,3 +1,4 @@
+import 'package:achieverse/responsive_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
@@ -8,6 +9,7 @@ import 'package:achieverse/widgets/nav_bar.dart';
 import 'package:achieverse/menu/menu_drawer.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:seo_renderer/seo_renderer.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Define a simple provider

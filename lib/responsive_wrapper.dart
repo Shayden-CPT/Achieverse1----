@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:achieverse/network_service.dart';
 
 class ResponsiveWrapper extends StatelessWidget {
   final Widget child;

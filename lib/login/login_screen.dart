@@ -3,6 +3,8 @@ import 'package:achieverse/home_page.dart';
 import 'package:achieverse/responsive_layout.dart';
 import 'package:achieverse/widgets/nav_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:achieverse/responsive_wrapper.dart';
+import 'package:achieverse/network_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Define a simple provider
